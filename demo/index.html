@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<title>debug-assert-RequireJS-module demo</title> 
+<script type="text/javascript" src="./js/require.js"></script>
+<script type="text/javascript" >
+require({
+	baseUrl : location.href.replace(/\/([^/]*$)/,'/')
+	,paths : {
+		'debug' : '../src/debug'
+	}
+});
+</script>
+</head><body> 
+<div>
+	<p>Debug log</p>
+<input type="text" id="text01" />
+<input type="button" id="button01" value="button"/>
+<br/>
+<input type="button" class="show-source" value="Show source code."/><script>
+require(['debug'],function(debug){
+	document.getElementById('button01').onclick=function(){
+		var textValue = document.getElementById('text01').value;
+		debug(textValue);
+	}
+});
+</script><div></div>
+</div>
+<div>
+<p>Assert</p>
+<input type="text" id="text02" value="1234"/>
+<input type="button" id="button02" value="button"/>
+	<br/>
+	<input type="button" class="show-source" value="Show source code."/><script>
+require(['debug'],function(debug){
+	document.getElementById('button02').onclick=function(){
+		var textValue = document.getElementById('text02').value;
+		debug(textValue);
+		debug.assert(textValue.length < 4);
+	}
+});
+</script><div></div>
+</div>
+<script>
+(function(){
+var inputTags = document.getElementsByTagName('input');
+for (var i = 0; i < inputTags.length; i++) {
+  var input = inputTags[i];
+  if(input.className == 'show-source'){
+		(function(input){
+			input.nextSibling.nextSibling.innerHTML = input.nextSibling.innerHTML
+				.replace(/\n/mg,'<br/>')
+				.replace(/\t/g,'  ')
+				.replace(/ /g,'&nbsp;');
+			input.nextSibling.nextSibling.style.display = 'none';
+			input.onclick = function(){
+				if(input.value == 'Show source code.'){
+					input.value = 'Hide source code.';
+					input.nextSibling.nextSibling.style.display = 'block';
+				}else{
+					input.value = 'Show source code.';
+					input.nextSibling.nextSibling.style.display = 'none';
+				}
+			};
+		})(input);
+	}
+}
+})();
+</script>
+</body></html>
