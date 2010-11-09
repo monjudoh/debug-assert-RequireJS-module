@@ -39,15 +39,17 @@ define(function() {
         (console.debug || console.log).apply(console, args);
         return;
       }
-      var context = context || global;
-      if (console.debug) console.debug('debug context:', context);
-      if (!console.debug) console.log('debug context:', context);
 
-      try {
-        callback.call(context, console, assert);
-      } catch(e) {
-        console.error(e);
-      }
+      (function (context) {
+        if (console.debug) console.debug('debug context:', context);
+        if (!console.debug) console.log('debug context:', context);
+
+        try {
+          callback.call(context, console, assert);
+        } catch(e) {
+          console.error(e);
+        }
+      })(context || global);
     })(global.console);
   }
 
