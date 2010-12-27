@@ -31,6 +31,15 @@ define(function() {
     // ステップアウトすると原因箇所が表示されます
   }
 
+  function isUsingConsole(callback) {
+    var callbackStr = callback.toString();
+    var consoleArgName = /^function[^(]*\(\s*(\S+)\s*[,)]/.exec(callbackStr)[1];
+    if (!consoleArgName) {
+      return false;
+    }
+    return callbackStr.replace(/^function[^)]*\)[^{]*{/,'').indexOf(consoleArgName) !== -1;
+  }
+
   function debug(callback, context) {
     var args = arguments;
 
@@ -41,8 +50,10 @@ define(function() {
       }
 
       (function (context) {
-        if (console.debug) console.debug('debug context:', context);
-        if (!console.debug) console.log('debug context:', context);
+        if (isUsingConsole(callback)) {
+          if (console.debug) console.debug('debug context:', context);
+          if (!console.debug) console.log('debug context:', context);
+        }
 
         try {
           callback.call(context, console, assert);
