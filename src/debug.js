@@ -50,7 +50,7 @@ define(function() {
       }
 
       (function (context) {
-        if (isUsingConsole(callback)) {
+        if (isUsingConsole(callback) && context !== global) {
           if (console.debug) console.debug('debug context:', context);
           if (!console.debug) console.log('debug context:', context);
         }
