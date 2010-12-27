@@ -13,10 +13,10 @@ define(function() {
     return this;
   })();
 
-  function assert(cond, message) {
+  function assert(cond, message, context) {
     if (typeof cond == 'function') {
       try {
-        cond = cond();
+        cond = cond.call(context || global);
       } catch(e) {
       }
     }
